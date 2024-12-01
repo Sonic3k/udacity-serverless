@@ -13,21 +13,29 @@ export function NewTodoInput({ onNewTodo }) {
 
   const onTodoCreate = async (event) => {
     try {
+      // Add validation
+      if (!newTodoName.trim()) {
+        alert('Please enter a todo name');
+        return;
+      }
+  
       const accessToken = await getAccessTokenSilently({
         audience,
         scope: 'write:todos'
-      })
-      const dueDate = calculateDueDate()
+      });
+      const dueDate = calculateDueDate();
       const createdTodo = await createTodo(accessToken, {
-        name: newTodoName,
+        name: newTodoName.trim(),
         dueDate
-      })
-      onNewTodo(createdTodo)
+      });
+      onNewTodo(createdTodo);
+      // Clear input after successful creation
+      setNewTodoName('');
     } catch (e) {
-      console.log('Failed to created a new TODO', e)
-      alert('Todo creation failed')
+      console.log('Failed to created a new TODO', e);
+      alert('Todo creation failed');
     }
-  }
+  };
 
   return (
     <Grid.Row>
