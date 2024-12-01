@@ -1,20 +1,16 @@
-import { getAllTodos } from '../../businessLogic/todos.mjs';
+import { getTodos } from '../../businessLogic/todos.mjs';
 import { getUserId } from '../utils.mjs';
+import { createLogger } from '../../utils/logger.mjs';
+
+const logger = createLogger('getTodos');
 
 export const handler = async (event) => {
   try {
-    const userId = getUserId(event); 
+    const userId = getUserId(event);
+    logger.info('Getting todos for user', { userId });
 
-    // Validate userId
-    if (!userId) {
-      console.error("User ID not found in the event");
-      return {
-        statusCode: 401,  // Unauthorized
-        body: JSON.stringify({ error: 'Unauthorized' })
-      };
-    }
-
-    const todos = await getAllTodos(userId);
+    // Business logic layer handles fetching todos
+    const todos = await getTodos(userId);
 
     return {
       statusCode: 200,
@@ -27,10 +23,16 @@ export const handler = async (event) => {
       })
     };
   } catch (error) {
-    console.error("Error fetching TODOs:", error);
+    logger.error('Error getting todos', { error });
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to fetch TODOs' })
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
+      body: JSON.stringify({
+        error: 'Could not fetch todos'
+      })
     };
   }
 };
