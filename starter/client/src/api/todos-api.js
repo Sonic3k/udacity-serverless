@@ -14,7 +14,7 @@ export async function getTodos(accessToken) {
   }
 
   const data = await response.json();
-  return data.items; // Make sure to return the 'items' array
+  return data.items; 
 }
 
 export async function createTodo(idToken, newTodo) {
