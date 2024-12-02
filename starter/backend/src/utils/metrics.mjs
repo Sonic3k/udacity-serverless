@@ -1,4 +1,3 @@
-// src/utils/metrics.mjs
 import AWS from 'aws-sdk';
 import { createLogger } from './logger.mjs';
 
@@ -18,15 +17,15 @@ export async function recordMetric(metricName, value, unit = 'Count') {
           Dimensions: [
             {
               Name: 'Environment',
-              Value: process.env.STAGE || 'dev'  // Added missing Value
+              Value: process.env.STAGE || 'dev'
             }
           ]
         }
       ]
     }).promise();
 
-    logger.info('Recorded metric', { metricName, value, unit });
+    logger.info('Metric recorded', { metricName, value, unit });
   } catch (error) {
-    logger.error('Error recording metric', { error, metricName });
+    logger.error('Failed to record metric', { error, metricName });
   }
 }
