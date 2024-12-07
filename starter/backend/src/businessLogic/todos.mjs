@@ -47,9 +47,8 @@ export async function deleteTodo(userId, todoId) {
  await todosAccess.deleteTodo(userId, todoId);
 }
 
-export async function generateUploadUrl(todoId) {
- logger.info('Generating upload URL', { todoId });
- return attachmentUtils.getUploadUrl(todoId);
+export async function generateUploadUrl(todoId, fileName) {
+  return attachmentUtils.getUploadUrl(todoId, fileName);
 }
 
 export async function updateAttachmentUrl(userId, todoId) {

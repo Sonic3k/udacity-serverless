@@ -1,8 +1,11 @@
-import AWS from 'aws-sdk';
-import { createLogger } from './logger.mjs';
+import AWS from 'aws-sdk'
+import AWSXRay from 'aws-xray-sdk-core'
+import { createLogger } from './logger.mjs'
 
-const cloudwatch = new AWS.CloudWatch();
-const logger = createLogger('Metrics');
+const XAWS = AWSXRay.captureAWS(AWS)
+const logger = createLogger('Metrics')
+
+const cloudwatch = new XAWS.CloudWatch()
 
 export async function recordMetric(metricName, value, unit = 'Count') {
   try {
@@ -22,10 +25,10 @@ export async function recordMetric(metricName, value, unit = 'Count') {
           ]
         }
       ]
-    }).promise();
+    }).promise()
 
-    logger.info('Metric recorded', { metricName, value, unit });
+    logger.info('Metric recorded', { metricName, value, unit })
   } catch (error) {
-    logger.error('Failed to record metric', { error, metricName });
+    logger.error('Failed to record metric', { error, metricName })
   }
 }
