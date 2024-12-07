@@ -17,6 +17,19 @@ export async function getTodos(accessToken) {
   return data.items; 
 }
 
+export async function getTodoById(accessToken, todoId) {
+  const response = await Axios.get(
+    `${process.env.REACT_APP_API_ENDPOINT}/todos/${todoId}`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      }
+    }
+  )
+  return response.data.item
+}
+
 export async function createTodo(idToken, newTodo) {
   const response = await Axios.post(
     `${process.env.REACT_APP_API_ENDPOINT}/todos`,
@@ -53,9 +66,9 @@ export async function deleteTodo(idToken, todoId) {
   })
 }
 
-export async function getUploadUrl(idToken, todoId) {
+export async function getUploadUrl(idToken, todoId, fileName) {
   const response = await Axios.post(
-    `${process.env.REACT_APP_API_ENDPOINT}/todos/${todoId}/attachment`,
+    `${process.env.REACT_APP_API_ENDPOINT}/todos/${todoId}/attachment?fileName=${fileName}`,
     '',
     {
       headers: {
